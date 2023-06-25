@@ -1,30 +1,35 @@
 package com.udacity.jwdnd.course1.cloudstorage.controllers;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.web.server.LocalServerPort;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class HomeControllerTest {
 
+    @LocalServerPort
+    private int port;
+
     private WebDriver driver;
-    private final String HOST = "http://localhost:8080/";
+    private final String HOST = "http://localhost:";
     @BeforeEach
     public void setUp() {
         // Set up WebDriver
         WebDriverManager.chromedriver().setup();
         driver = new ChromeDriver();
-        driver.get(HOST + "signup");
+        driver.get(HOST + port+"/signup");
 
         // Fill in signup form
         WebElement usernameInput = driver.findElement(By.id("inputUsername"));
@@ -41,7 +46,7 @@ class HomeControllerTest {
         signupButton.click();
 
         // Navigate to the login page
-        driver.get(HOST + "login");
+        driver.get(HOST + port+"/login");
 
         // Fill in login form
         usernameInput = driver.findElement(By.id("inputUsername"));
@@ -66,6 +71,7 @@ class HomeControllerTest {
     }
 
     @Test
+    @Order(1)
     public void testCreateNote() throws InterruptedException {
         WebDriverWait wait = new WebDriverWait(driver, 10);
         driver.findElement(By.id("nav-notes-tab")).click();
@@ -105,6 +111,7 @@ class HomeControllerTest {
     }
 
     @Test
+    @Order(2)
     public void testEditNote() throws InterruptedException {
         // Edit note and submit
         WebDriverWait wait = new WebDriverWait(driver, 10);
@@ -151,6 +158,7 @@ class HomeControllerTest {
     }
 
     @Test
+    @Order(3)
     public void testDeleteNote() {
         // Delete note and submit
         WebDriverWait wait = new WebDriverWait(driver, 10);
@@ -177,6 +185,7 @@ class HomeControllerTest {
     }
 
     @Test
+    @Order(4)
     public void testCreateCredential() throws InterruptedException {
         WebDriverWait wait = new WebDriverWait(driver, 10);
         driver.findElement(By.id("nav-credentials-tab")).click();
@@ -223,6 +232,7 @@ class HomeControllerTest {
     }
 
     @Test
+    @Order(5)
     public void testEditCredential() throws InterruptedException {
         WebDriverWait wait = new WebDriverWait(driver, 10);
         driver.findElement(By.id("nav-credentials-tab")).click();
@@ -272,6 +282,7 @@ class HomeControllerTest {
     }
 
     @Test
+    @Order(6)
     public void testDeleteCredential() {
         // Delete credential and submit
         WebDriverWait wait = new WebDriverWait(driver, 10);

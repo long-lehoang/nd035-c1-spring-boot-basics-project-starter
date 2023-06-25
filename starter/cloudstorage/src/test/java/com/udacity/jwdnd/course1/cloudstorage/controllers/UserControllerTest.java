@@ -8,10 +8,16 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.web.server.LocalServerPort;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class UserControllerTest {
+
+    @LocalServerPort
+    private int port;
 
     private WebDriver driver;
 
@@ -31,13 +37,13 @@ class UserControllerTest {
     @Test
     public void testUnauthorizedAccess() {
         // Navigate to home page
-        driver.get("http://localhost:8080/home");
+        driver.get("http://localhost:"+port+"/home");
         // Verify that login page is displayed
         WebElement loginForm = driver.findElement(By.id("login-button"));
         assertEquals("Login", loginForm.getText());
 
         // Navigate to home page
-        driver.get("http://localhost:8080/signup");
+        driver.get("http://localhost:"+port+"/signup");
         // Verify that login page is displayed
         String signup = driver.getTitle();
         assertEquals("Sign Up", signup);
@@ -46,7 +52,7 @@ class UserControllerTest {
     @Test
     public void testSignupAndLogin() {
         // Navigate to signup page
-        driver.get("http://localhost:8080/signup");
+        driver.get("http://localhost:"+port+"/signup");
 
         // Fill in signup form
         WebElement usernameInput = driver.findElement(By.id("inputUsername"));
@@ -64,7 +70,7 @@ class UserControllerTest {
 
 
         // Navigate to login page
-        driver.get("http://localhost:8080/login");
+        driver.get("http://localhost:"+port+"/login");
 
         // Fill in login form
         usernameInput = driver.findElement(By.id("inputUsername"));
@@ -89,7 +95,7 @@ class UserControllerTest {
         assertEquals("Login", loginForm);
 
         // Navigate to home page
-        driver.get("http://localhost:8080/home");
+        driver.get("http://localhost:"+port+"/home");
         // Verify that login page is displayed
         String loginTitle = driver.getTitle();
         assertEquals("Login", loginTitle);
